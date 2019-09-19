@@ -132,7 +132,7 @@ vector<ArrayXd> getweights (const vector<W>& weights)
 //
 
 // VDP
-tuple wrapperVDP (
+boost::python::tuple wrapperVDP (
     const object& X,
     const float clusterprior,
     const int maxclusters,
@@ -153,13 +153,13 @@ tuple wrapperVDP (
                       verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qZ, ArrayXd(weights.Elogweight().exp()),
+  return boost::python::make_tuple(f, qZ, ArrayXd(weights.Elogweight().exp()),
                     getmean(clusters), getcov(clusters));
 }
 
 
 // BGMM
-tuple wrapperBGMM (
+boost::python::tuple wrapperBGMM (
     const object& X,
     const float clusterprior,
     const int maxclusters,
@@ -180,13 +180,13 @@ tuple wrapperBGMM (
                        verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qZ, ArrayXd(weights.Elogweight().exp()),
+  return boost::python::make_tuple(f, qZ, ArrayXd(weights.Elogweight().exp()),
                     getmean(clusters), getcov(clusters));
 }
 
 
 // GMC
-tuple wrapperGMC (
+boost::python::tuple wrapperGMC (
     const boost::python::list &X,
     const float clusterprior,
     const int maxclusters,
@@ -208,13 +208,13 @@ tuple wrapperGMC (
                       sparse, verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qZ, getweights<GDirichlet>(weights), getmean(clusters),
+  return boost::python::make_tuple(f, qZ, getweights<GDirichlet>(weights), getmean(clusters),
                     getcov(clusters));
 }
 
 
 // SGMC
-tuple wrapperSGMC (
+boost::python::tuple wrapperSGMC (
     const boost::python::list &X,
     const float clusterprior,
     const int maxclusters,
@@ -232,17 +232,17 @@ tuple wrapperSGMC (
   vector<GaussWish> clusters;
 
   // Do the clustering
-  double f = learnSGMC(X_, qZ, weights, clusters, clusterprior, maxclusters, 
+  double f = learnSGMC(X_, qZ, weights, clusters, clusterprior, maxclusters,
                        sparse, verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qZ, getweights<Dirichlet>(weights), getmean(clusters),
+  return boost::python::make_tuple(f, qZ, getweights<Dirichlet>(weights), getmean(clusters),
                     getcov(clusters));
 }
 
 
 // SCM
-tuple wrapperSCM (
+boost::python::tuple wrapperSCM (
     const boost::python::list &X,
     const float dirprior,
     const float gausprior,
@@ -267,13 +267,13 @@ tuple wrapperSCM (
                       gausprior, trunc, maxclusters, verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qY, qZ, getweights<GDirichlet>(weights_j),
+  return boost::python::make_tuple(f, qY, qZ, getweights<GDirichlet>(weights_j),
          getweights<Dirichlet>(weights_t), getmean(clusters), getcov(clusters));
 }
 
 
 // MCM
-tuple wrapperMCM (
+boost::python::tuple wrapperMCM (
     const boost::python::list &W,
     const boost::python::list &X,
     const float gausprior_t,
@@ -297,12 +297,12 @@ tuple wrapperMCM (
   vector<GaussWish> clusters_k;
 
   // Do the clustering
-  double f = learnMCM(W_, X_, qY, qZ, weights_j, weights_t, clusters_t, 
+  double f = learnMCM(W_, X_, qY, qZ, weights_j, weights_t, clusters_t,
                 clusters_k,  gausprior_t, gausprior_k, trunc, maxclusters,
                 verbose, nthreads);
 
   // Return relevant objects
-  return make_tuple(f, qY, qZ, getweights<GDirichlet>(weights_j),
-                getweights<Dirichlet>(weights_t), getmean(clusters_t), 
+  return boost::python::make_tuple(f, qY, qZ, getweights<GDirichlet>(weights_j),
+                getweights<Dirichlet>(weights_t), getmean(clusters_t),
                 getmean(clusters_k), getcov(clusters_t), getcov(clusters_k));
 }
